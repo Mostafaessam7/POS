@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\POS.Payments.Domain\POS.Payments.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\POS.SharedKernel\POS.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>

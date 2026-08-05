@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POS.Catalog.Domain\POS.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\POS.Common\POS.Common.csproj" />
+    <!-- For IMasterDataSource — the same registered-implementation inversion
+         POS.Sales uses for ISyncRecordHandler, so Sync never references a module. -->
+    <ProjectReference Include="..\..\Sync\POS.Sync\POS.Sync.csproj" />
+  </ItemGroup>
+
+</Project>

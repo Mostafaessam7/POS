@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <!-- SQL Server is the cloud store for every module (ADR 003), and PosSqlServer is
+         the one place its settings are decided. The terminal agent overrides this with
+         SQLite for its own context; carrying the provider here costs it nothing. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <!-- PrivateAssets=none deliberately: module projects inherit
+         PosDesignTimeDbContextFactory, so IDesignTimeDbContextFactory must be
+         resolvable in their compilations too. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="none" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POS.SharedKernel\POS.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>

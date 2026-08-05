@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pos-api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project", "src/Hosts/POS.Api",
+        "-c", "Release",
+        "--",
+        "--environment", "Development",
+        "--urls", "http://localhost:9850"
+      ],
+      "port": 9850
+    },
+    {
+      "name": "pos-backoffice",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "src/Frontend/POS.BackOffice", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}

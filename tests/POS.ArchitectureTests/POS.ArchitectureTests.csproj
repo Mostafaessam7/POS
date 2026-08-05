@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- Test method names use underscores by convention. -->
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Label="Global usings">
+    <Using Include="Xunit" />
+    <Using Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="TngTech.ArchUnitNET.xUnit" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Modules\Catalog\POS.Catalog\POS.Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Catalog\POS.Catalog.Domain\POS.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Shared\POS.Common\POS.Common.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Expenses\POS.Expenses.Domain\POS.Expenses.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Fiscal\POS.Fiscal\POS.Fiscal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Fiscal\POS.Fiscal.Abstractions\POS.Fiscal.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Fiscal\POS.Fiscal.Domain\POS.Fiscal.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Fiscal\POS.Fiscal.Generic\POS.Fiscal.Generic.csproj" />
+    <ProjectReference Include="..\..\src\Shared\POS.Hardware.Abstractions\POS.Hardware.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\POS.Identity\POS.Identity.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\POS.Identity.Domain\POS.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Inventory\POS.Inventory\POS.Inventory.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Inventory\POS.Inventory.Domain\POS.Inventory.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Payments\POS.Payments\POS.Payments.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Payments\POS.Payments.Abstractions\POS.Payments.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Payments\POS.Payments.Domain\POS.Payments.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Payments\POS.Payments.Manual\POS.Payments.Manual.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Purchasing\POS.Purchasing.Domain\POS.Purchasing.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Reconciliation\POS.Reconciliation.Domain\POS.Reconciliation.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Sales\POS.Sales\POS.Sales.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Sales\POS.Sales.Domain\POS.Sales.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Shared\POS.SharedKernel\POS.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Sync\POS.Sync\POS.Sync.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Sync\POS.Sync.Domain\POS.Sync.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

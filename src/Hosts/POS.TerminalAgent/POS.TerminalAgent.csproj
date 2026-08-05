@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\POS.Common\POS.Common.csproj" />
+    <ProjectReference Include="..\..\Modules\Sync\POS.Sync\POS.Sync.csproj" />
+  </ItemGroup>
+
+</Project>

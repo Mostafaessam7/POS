@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POS.Sales.Domain\POS.Sales.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\POS.Common\POS.Common.csproj" />
+    <!-- Sales posts stock through the Inventory port defined here. Neither module
+         references the other; they meet at the contract (ADR 002). -->
+    <ProjectReference Include="..\..\..\Shared\POS.Contracts\POS.Contracts.csproj" />
+    <!-- Sales implements Sync's ISyncRecordHandler port. The dependency runs THIS way
+         deliberately: Sync owns transport and defines the seam, modules own meaning and
+         plug into it. The reverse — Sync referencing every module — is what
+         architecture rule 2 forbids. -->
+    <ProjectReference Include="..\..\Sync\POS.Sync\POS.Sync.csproj" />
+  </ItemGroup>
+
+</Project>

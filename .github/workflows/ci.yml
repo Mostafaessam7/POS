@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push: { branches: [main] }
+  pull_request:
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # 1. Restore in locked mode. A lock file mismatch fails the build rather
+      #    than silently resolving a different version than the developer had.
+      - name: Restore
+        run: dotnet restore --locked-mode
+
+      # 2. Build. Warnings are errors (Directory.Build.props).
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      # 3. Architecture tests run BEFORE unit tests: fastest stage, and it catches
+      #    the most common class of pull request mistake.
+      - name: Architecture tests
+        run: dotnet test tests/POS.ArchitectureTests --no-build --configuration Release --logger trx
+
+      - name: Unit tests
+        run: dotnet test tests/POS.UnitTests --no-build --configuration Release --logger trx
+
+      # 5. Real SQL Server via Testcontainers. Slower than an in-memory provider,
+      #    and the difference between tests that mean something and tests that don't.
+      - name: Integration tests
+        run: dotnet test tests/POS.IntegrationTests --no-build --configuration Release --logger trx
+
+      # 6. Licence audit. Given MediatR, AutoMapper, MassTransit and
+      #    FluentAssertions all changed terms within eighteen months, an
+      #    automated check is table stakes rather than paranoia.
+      - name: Licence audit
+        run: |
+          dotnet tool install --global nuget-license
+          nuget-license -i POS.sln -t --allowed-license-types licenses.json
+
+      - name: Vulnerability scan
+        run: |
+          dotnet list package --vulnerable --include-transitive 2>&1 | tee vuln.log
+          grep -q "no vulnerable packages" vuln.log || (echo "Vulnerable packages found" && exit 1)
+
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/*.trx'

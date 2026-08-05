@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\POS.Common\POS.Common.csproj" />
+    <!-- Identity publishes the organisational facts other modules need through the
+         contract, rather than being referenced by them directly. -->
+    <ProjectReference Include="..\..\..\Shared\POS.Contracts\POS.Contracts.csproj" />
+    <ProjectReference Include="..\POS.Identity.Domain\POS.Identity.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

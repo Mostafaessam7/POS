@@ -1,0 +1,95 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+[*.cs]
+indent_size = 4
+csharp_new_line_before_open_brace = all
+csharp_style_namespace_declarations = file_scoped:error
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_prefer_braces = when_multiline:suggestion
+
+dotnet_style_readonly_field = true:warning
+dotnet_style_require_accessibility_modifiers = always:warning
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+
+# Async methods must be suffixed Async, and must not be fire-and-forget.
+dotnet_diagnostic.CA2007.severity = none    # ConfigureAwait not needed in ASP.NET Core
+dotnet_diagnostic.CA1848.severity = none    # LoggerMessage source-gen: revisit if logging is hot
+dotnet_diagnostic.CA1062.severity = none    # nullable reference types cover this
+
+# ---------------------------------------------------------------------------
+# Suppressions added during the executable-baseline milestone.
+#
+# Each of these was reviewed against the alternative of changing the code. They
+# are suppressed because the rule is genuinely wrong for this codebase, NOT to
+# make the build go green. Everything else the analyzers flagged was fixed at
+# the root cause.
+# ---------------------------------------------------------------------------
+
+# CA1716: type named `Error` collides with a reserved word in some CLR languages
+# (notably VB's Error statement). `Error` is the established name in the
+# Result/Error pattern this codebase is built on, it appears in ~40 ADRs and
+# every module, and no consumer will be written in VB. Renaming to `DomainError`
+# would cost more clarity than the interop risk is worth.
+dotnet_diagnostic.CA1716.severity = none
+
+# CA1000: static members on generic types — Result<T>.Success / Result<T>.Failure.
+# The factory methods ARE the intended API of the Result pattern; the rule exists
+# to discourage awkward call sites like Foo<int>.Bar(), which here reads as
+# Result<Sale>.Success(sale) and is exactly what we want. Instance factories are
+# impossible for a type whose whole purpose is construction.
+dotnet_diagnostic.CA1000.severity = none
+
+# CA1711: reserved type-name suffixes. Two domain types trip this:
+#   VariantAttribute      — retail vocabulary for a product trait (colour, size)
+#   Permission            — standard authorization vocabulary (ADR 013)
+# The rule guards against confusion with System.Attribute and the long-dead
+# CodeAccessPermission from .NET Framework CAS. Neither base type is in play here.
+#
+# NOTE: `VariantAttribute` is arguably still a poor name in C#, since the suffix
+# implies `[Variant]`. Renaming it is a DOMAIN VOCABULARY decision, not a build
+# fix, so it is flagged for review rather than changed unilaterally during a
+# stabilisation milestone.
+dotnet_code_quality.CA1711.allowed_suffixes = Attribute|Permission
+
+# Naming
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+
+# ---------------------------------------------------------------------------
+# EF Core migrations are machine-written.
+#
+# `dotnet ef migrations add` emits block-scoped namespaces and repeated
+# `new[] { "TenantId", "Code" }` index arguments, which trip IDE0161 and CA1861
+# on a solution that treats warnings as errors. The alternative is hand-editing
+# every generated file after every scaffold — which is how a team ends up
+# disabling TreatWarningsAsErrors for the whole solution instead.
+#
+# `generated_code = true` is the supported way to tell the analyzers this code
+# is not hand-authored. It applies ONLY to the Migrations folders; the
+# configuration classes that DESCRIBE the model are hand-written and stay under
+# full analysis.
+#
+# Hand-written additions to a generated migration (see IX_StockMovements_Document
+# in InitialInventory) are therefore unanalysed too. That is the trade: those
+# edits are reviewed, not enforced.
+# ---------------------------------------------------------------------------
+[**/Persistence/Migrations/*.cs]
+generated_code = true
+
+[*.{csproj,props,targets}]
+indent_size = 2
+
+[*.{json,yml,yaml}]
+indent_size = 2

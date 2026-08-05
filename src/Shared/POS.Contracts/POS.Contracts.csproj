@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <!-- The shared kernel only. POS.Contracts is where modules meet, so it must never
+         acquire a reference to a module — a contract that depends on one module is not
+         a contract, it is that module's public API by another name. -->
+    <ProjectReference Include="..\POS.SharedKernel\POS.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>
