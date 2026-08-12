@@ -14,8 +14,8 @@ those, trust them over this file.
 **Current state, in one sentence:** the backend — nine modules, tenancy, auth,
 permissions, the full transaction lifecycle, background jobs, edge hardening, and CI —
 builds, migrates, and runs clean against a real SQL Server, with 336 unit, 15
-architecture, and 106+ integration tests passing. Nothing here is aspirational text; run
-the commands below yourself.
+architecture, and 136 integration tests passing, plus a React back-office frontend that
+covers every module. Nothing here is aspirational text; run the commands below yourself.
 
 ## Getting started
 
@@ -67,7 +67,7 @@ src/Shared/       SharedKernel (no dependencies), Common (cross-cutting), Contra
 src/Modules/      One folder per module, two projects each
 src/Hosts/        Composition roots (POS.Api). No business logic.
 tests/            Architecture, unit, integration
-docs/adr/         Architecture Decision Records
+docs/adr/         Architecture Decision Records (57 of them — see docs/adr/README.md for an index)
 ```
 
 Each module has two projects:
@@ -145,9 +145,12 @@ terms before adding anything.
 
 ## What's not here yet
 
-No terminal/cashier UI and no back-office admin UI exist — every interaction with this
-system today is a raw HTTP API. There is no CD pipeline, no Infrastructure-as-Code, and
-no secrets-management integration; a `Dockerfile` for the API exists
+The back-office admin UI (`src/Frontend/POS.BackOffice`) exists and covers every module,
+including a browser-based register screen — see HANDOVER.md §9. What's still missing is
+a real **terminal/cashier UI**: an offline-first, hardware-integrated (barcode scanner,
+receipt printer, cash drawer, card terminal) application, out of scope until a target
+platform is chosen. There is no CD pipeline, no Infrastructure-as-Code, and no
+secrets-management integration; a `Dockerfile` for the API exists
 (`src/Hosts/POS.Api/Dockerfile`) but has not been build-verified in an environment with
 Docker available. A handful of integrations are intentionally unbuilt pending a business
 decision this codebase cannot make for itself: which country's tax authority, which card

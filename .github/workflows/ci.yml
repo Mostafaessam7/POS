@@ -62,3 +62,30 @@ jobs:
         with:
           name: test-results
           path: '**/*.trx'
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: src/Frontend/POS.BackOffice
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: src/Frontend/POS.BackOffice/package-lock.json
+
+      # Locked install: a lock file mismatch fails the build rather than
+      # silently resolving a different dependency tree than the developer had.
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Audit
+        run: npm audit --audit-level=high
