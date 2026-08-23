@@ -16,6 +16,8 @@ permissions, the full transaction lifecycle, background jobs, edge hardening, an
 builds, migrates, and runs clean against a real SQL Server, with 336 unit, 15
 architecture, and 136 integration tests passing, plus a React back-office frontend that
 covers every module. Nothing here is aspirational text; run the commands below yourself.
+Re-verified from scratch 2026-08-23 (all four suites plus `npm run build`, no code
+changes since the 2026-08-05 state HANDOVER.md describes) — same numbers, still clean.
 
 ## Getting started
 

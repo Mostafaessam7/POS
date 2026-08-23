@@ -85,13 +85,13 @@ a real SQL Server, not just unit-tested.
 3. **A Docker-capable environment.** `Dockerfile` / `docker-compose.yml` exist and are
    reviewed but have never actually been built — no session so far has had a Docker
    daemon available.
-4. **`npm audit` advisory on `react-router-dom`** — accepted, not fixed, scoped to RSC
-   (not in use here). Re-check when upgrading react-router-dom.
 
 None of the remaining engineering-only items from the previous list are open — voids,
 held sales, discounts, and Users & Roles pagination all shipped this session (see §1 and
-§3). What's left is entirely business-blocked (items 1–3 above) or a low-priority
-housekeeping note (item 4).
+§3). What's left is entirely business-blocked (items 1–3 above). The `npm audit`
+advisory on `react-router-dom` this file used to list as a fourth item is gone —
+re-checked 2026-08-23, `npm audit` in `src/Frontend/POS.BackOffice` now reports **0
+vulnerabilities** (previously one accepted RSC-scoped advisory).
 
 **Regression found and fixed today (2026-08-05):** `dotnet test tests/POS.IntegrationTests`
 was NOT actually clean as this file claimed — 6 of 136 tests in
@@ -135,7 +135,23 @@ advisory, still not applicable to this SPA).
 
 ---
 
-*Last updated: 2026-08-05, after finding and fixing a real regression left by the
+*Re-verified 2026-08-23, no code changes since the entry below — this was a clean
+re-run, not a work session. All four suites plus the frontend build were run again from
+scratch: `dotnet build POS.sln -c Release` (0 warnings, 0 errors), `POS.UnitTests`
+(336/336), `POS.ArchitectureTests` (15/15), `POS.IntegrationTests` against a real SQL
+Server (136/136), and `npm run build` in `src/Frontend/POS.BackOffice` (clean; one
+pre-existing "chunk larger than 500kB" advisory, not an error). Every number in this
+file and in HANDOVER.md still holds. The one thing that changed on its own:
+`npm audit` now reports 0 vulnerabilities — the `react-router-dom` advisory §2 item 4
+used to accept has since been resolved upstream (see the note above, in place of the
+old item 4). Also found, while re-checking, a real documentation gap unrelated to this
+regression: two frontend files existed with no mention anywhere in HANDOVER.md or
+README.md — `VantaBackground.tsx`/`VantaHeroBackground.tsx` (an animated login/dashboard
+background) and `useCountUp.ts` (the animated count-up on the dashboard's stat tiles).
+Purely cosmetic, no API/behaviour change, but genuinely undocumented until now — see
+HANDOVER.md §9.
+
+*Previously updated: 2026-08-05, after finding and fixing a real regression left by the
 previous session's Users & Roles pagination work: `UserManagementApiTests.cs` still
 deserialized `GET /users`/`GET /roles` as a bare list instead of the new `PagedResponse<T>`
 envelope, so 6 of 136 integration tests were silently failing despite this file claiming

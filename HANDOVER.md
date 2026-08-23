@@ -24,6 +24,16 @@ inferred from reading it.** Where a bug was found by running previously-untested
 it is called out explicitly, because the same class of bug is likely wherever
 `dotnet ef migrations add` has not yet been run against real data.
 
+**Re-verified 2026-08-23** (no code changes since 2026-08-05 — this was a from-scratch
+re-run, not a new milestone): `dotnet build POS.sln -c Release` clean, `POS.UnitTests`
+336/336, `POS.ArchitectureTests` 15/15, `POS.IntegrationTests` 136/136 against a real SQL
+Server, `npm run build` clean. Every number below still holds. Two things changed
+without any code change on this side: `npm audit` now reports 0 vulnerabilities (§9
+known-shortcuts item 2, previously an accepted advisory); and this pass found two
+frontend files with no corresponding documentation anywhere in this file — an animated
+login/dashboard background and a dashboard count-up animation, both purely cosmetic,
+now recorded in §9.
+
 ---
 
 ## 1. Architecture
@@ -861,6 +871,18 @@ Zero console errors across every session.
 | Users & Roles (`/users`) | `GET/POST /users`, `POST /users/{id}/roles(/revoke)`, `GET/POST /roles`, `GET /permissions` |
 | Settings (`/settings`) | `GET/PUT /settings/{purchasing,inventory}-policy` |
 
+**Cosmetic addition, previously undocumented (found during the 2026-08-23
+re-verification, not new this session):** `LoginPage.tsx` and `DashboardPage.tsx` render
+an animated background (`src/components/VantaBackground.tsx`,
+`VantaHeroBackground.tsx` — vanta.js's `NET` effect over a `three.js` canvas, each
+wrapping the well-known UMD/CJS interop quirk where Vite doesn't always unwrap
+`module.exports.default` cleanly), and the dashboard's stat tiles count up from 0 on
+load (`src/hooks/useCountUp.ts`, `setInterval`-driven rather than
+`requestAnimationFrame` specifically so a backgrounded tab still finishes the
+animation). Purely visual — no API surface, no behaviour change, nothing for a test
+suite to cover — which is presumably why it shipped without a corresponding note here.
+Flagging it now so it isn't mistaken for undocumented functional work later.
+
 **Architecture worth knowing before extending it:**
 
 - **`src/api/accessToken.ts`** holds the access token in a module-level variable —
@@ -897,10 +919,10 @@ Zero console errors across every session.
    cap at whatever the backend returns unpaged, same as every other list endpoint in
    this codebase (e.g. `GET /purchasing/orders` caps at 200). Not urgent; flagged so it
    doesn't quietly become a problem at a real tenant's scale.
-2. **The `npm audit` finding on `react-router-dom` is accepted, not fixed.** The
-   latest version (7.18.2, in use) has one remaining advisory scoped to RSC
-   (React Server Components) mode with server actions — a feature this plain
-   client-side SPA does not use. Every OLDER version has broader-impact XSS/RCE
-   advisories instead of that one; there is currently no version of this package
-   published without SOME open advisory. Re-check `npm audit` before shipping, in
-   case a genuinely clean release has landed since.
+2. ~~The `npm audit` finding on `react-router-dom` is accepted, not fixed.~~
+   **Resolved, re-checked 2026-08-23**: `npm audit` in `src/Frontend/POS.BackOffice`
+   now reports **0 vulnerabilities**. The RSC-scoped advisory this item used to accept
+   (present on `react-router-dom` 7.18.2 at the time this item was written) is gone
+   from the currently-installed version — no package version bump or code change was
+   needed on this side, the advisory itself was withdrawn/superseded upstream. No
+   further action needed unless a future `npm audit` turns something up again.
