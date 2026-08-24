@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" width="90" height="90">
+<defs><linearGradient id="gFav" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#33E0C7"/><stop offset="1" stop-color="#3D6CF2"/>
+    </linearGradient></defs>
+<rect x="0" y="0" width="90" height="90" rx="20" fill="#0A0F1C"/>
+<line x1="22" y1="30" x2="42" y2="16" stroke="url(#gFav)" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+<line x1="22" y1="30" x2="42" y2="44" stroke="url(#gFav)" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+<line x1="42" y1="16" x2="42" y2="44" stroke="url(#gFav)" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+<line x1="42" y1="44" x2="22" y2="58" stroke="url(#gFav)" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+<line x1="42" y1="16" x2="62" y2="30" stroke="url(#gFav)" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+<circle cx="22" cy="30" r="4.5" fill="#33E0C7"/>
+<circle cx="42" cy="16" r="4.5" fill="#3D6CF2"/>
+<circle cx="42" cy="44" r="4.5" fill="#3D6CF2"/>
+<circle cx="22" cy="58" r="4.5" fill="#33E0C7"/>
+<circle cx="62" cy="30" r="4.5" fill="#33E0C7"/>
+</svg>
