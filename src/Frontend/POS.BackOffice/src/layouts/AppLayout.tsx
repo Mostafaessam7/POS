@@ -113,22 +113,7 @@ export function AppLayout() {
       <aside className="app-sidebar">
         <div className="app-sidebar__brand">
           <span className="app-sidebar__mark">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="40" rx="11" fill="url(#sidebar-mark-gradient)" />
-              <path
-                d="M12.5 27.5v-15h6.75a4.75 4.75 0 1 1 0 9.5H14.5"
-                stroke="#fff"
-                strokeWidth="2.15"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <defs>
-                <linearGradient id="sidebar-mark-gradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#5b8cff" />
-                  <stop offset="1" stopColor="#1c2ec7" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <img src="/favicon.svg" alt="" />
           </span>
           <span className="app-sidebar__brand-text">{t("sidebar.brand")}</span>
         </div>

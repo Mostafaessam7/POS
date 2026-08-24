@@ -883,6 +883,19 @@ animation). Purely visual — no API surface, no behaviour change, nothing for a
 suite to cover — which is presumably why it shipped without a corresponding note here.
 Flagging it now so it isn't mistaken for undocumented functional work later.
 
+**The Mecodex brand kit (`src/Frontend/POS.BackOffice/Mecodex-Brand-Assets/`) is now
+wired in, not just committed.** `public/favicon.svg` is the kit's dark rounded-square
+network-mark favicon (previously a generic placeholder SVG); `public/favicon.ico` is
+the kit's ICO, added as an `<link rel="alternate icon">` fallback in `index.html` for
+browsers/contexts that don't take an SVG favicon. The same square mark now also
+replaces the placeholder inline "P" SVG both `LoginPage.tsx` (`login-brand__mark`) and
+`AppLayout.tsx` (`app-sidebar__mark`) used to render inline — both now `<img
+src="/favicon.svg">`, one asset instead of three near-duplicate inline SVGs.
+`index.html`'s `<title>` changed from the scaffold default `pos-backoffice` to
+`Mecodex POS`. The kit's full logo lockups (wordmark, dark/light-bg variants) and social
+assets remain unused — nothing in the current UI has a slot for a wordmark next to the
+mark, only the icon-sized badge this swap covers.
+
 **Architecture worth knowing before extending it:**
 
 - **`src/api/accessToken.ts`** holds the access token in a module-level variable —
