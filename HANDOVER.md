@@ -892,7 +892,16 @@ replaces the placeholder inline "P" SVG both `LoginPage.tsx` (`login-brand__mark
 `AppLayout.tsx` (`app-sidebar__mark`) used to render inline — both now `<img
 src="/favicon.svg">`, one asset instead of three near-duplicate inline SVGs.
 `index.html`'s `<title>` changed from the scaffold default `pos-backoffice` to
-`Mecodex POS`. The kit's full logo lockups (wordmark, dark/light-bg variants) and social
+`Mecodex POS`. Completed as a follow-up: `public/favicon-16x16.png`/`favicon-32x32.png`
+(the kit's small PNG exports, as sized `<link rel="icon" type="image/png">` entries
+alongside the SVG — most browsers still prefer the PNG at those exact sizes over
+scaling the SVG down) and `public/apple-touch-icon.png` (the kit's 192px favicon
+export, `<link rel="apple-touch-icon">` — used when someone adds the site to an iOS/
+iPadOS home screen), plus `<meta name="theme-color" content="#0A0F1C">` matching the
+favicon's own dark background so a mobile browser's own chrome (status bar/tab strip)
+picks up the brand colour instead of a default white. All five icon URLs confirmed
+`200` from a live dev server. The kit's full logo lockups (wordmark, dark/light-bg
+variants) and social
 assets remain unused — nothing in the current UI has a slot for a wordmark next to the
 mark, only the icon-sized badge this swap covers.
 
