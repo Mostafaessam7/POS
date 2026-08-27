@@ -34,6 +34,23 @@ frontend files with no corresponding documentation anywhere in this file — an 
 login/dashboard background and a dashboard count-up animation, both purely cosmetic,
 now recorded in §9.
 
+**Re-verified again 2026-08-27**, independently, in a fresh review session (nothing
+below taken on faith — checked against the actual repository, not just re-read):
+`dotnet build POS.sln -c Release` clean (0 warnings, 0 errors), `POS.UnitTests`
+336/336, `POS.ArchitectureTests` 15/15, `POS.IntegrationTests` 136/136 against a real
+local SQL Server, `npm run build` clean, `npm audit` 0 vulnerabilities. Every number in
+this document still holds. Three commits landed since the 2026-08-23 re-run above
+(`b42706b`, `4a3d477`, `378915d`, dated 2026-08-24/2026-08-26): the "Mecodex" brand-asset
+kit was added and wired in as the app's favicon and login/sidebar mark, and the tab
+title changed to "Mecodex POS" — cosmetic only, already correctly logged in §9 by those
+commits' own changes. One internal inconsistency found and fixed: §6 item 1 still said
+the cross-module-writes-are-eventually-consistent decision "should become a real ADR"
+after §1 (above) already recorded it as ratified ADR 057 — reconciled. Docker Desktop's
+daemon was not running in this review environment, so the Testcontainers path and the
+API `Dockerfile`/`docker-compose.yml` (§7) remain unbuilt here too; the integration
+suite passed via a reachable local SQL Server instance, per its documented fallback
+order.
+
 ---
 
 ## 1. Architecture
@@ -384,7 +401,9 @@ sometimes finding rows from the previous one.
 
 1. **Cross-module writes are eventually consistent** (external effect commits first,
    idempotency + ordering are the safety net, not a distributed transaction) — see §1.
-   Used by five call sites now. **Should become a real ADR.**
+   Used by five call sites now. **Now formalised as ADR 057** — this item is retained
+   here only as the original rationale; the header above ("not yet written as formal
+   ADRs") no longer applies to this specific entry.
 2. **`Sale.Open` accepts an optional caller-supplied id.** Changed from always generating
    a fresh UUIDv7 to accepting the terminal-assigned id when replaying from sync. This
    was necessary: without it, a crash-and-retry on sale upload would re-post the stock

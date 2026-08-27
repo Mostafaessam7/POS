@@ -135,6 +135,26 @@ advisory, still not applicable to this SPA).
 
 ---
 
+*Re-verified 2026-08-27, independently, in a fresh review session (no HANDOVER.md/
+PROJECT_STATUS.md claim was taken on faith — each was checked against the actual
+repository). `dotnet build POS.sln -c Release` (0 warnings, 0 errors), `POS.UnitTests`
+(336/336), `POS.ArchitectureTests` (15/15), `POS.IntegrationTests` against a real local
+SQL Server (136/136), `npm run build` in `src/Frontend/POS.BackOffice` (clean, same
+pre-existing chunk-size advisory), and `npm audit` (0 vulnerabilities) — every number in
+this file and HANDOVER.md still holds exactly. Three commits landed after the
+2026-08-23 entry below (`b42706b`, `4a3d477`, `378915d`, dated 2026-08-24 and
+2026-08-26): the "Mecodex" brand-asset kit was added and wired in as the app's favicon/
+logo mark (tab title now "Mecodex POS"). These are cosmetic only — no API, schema, or
+test-surface change — and were already correctly logged in HANDOVER.md §9 by the
+commits themselves; this file did not previously mention them, which is now fixed.
+Docker Desktop's daemon is not running in this review environment, so the Testcontainers
+fallback path and the API `Dockerfile`/`docker-compose.yml` remain unbuilt/unverified
+here too, same as every prior entry — the integration suite passed via a reachable local
+SQL Server instance instead, per its documented fallback order. No regressions, no
+factual corrections needed to either file's substance beyond this note and one internal
+cross-reference fixed in HANDOVER.md §6 (item 1 there still said "should become a real
+ADR" after §1 had already recorded it as ratified ADR 057 — now reconciled).*
+
 *Re-verified 2026-08-23, no code changes since the entry below — this was a clean
 re-run, not a work session. All four suites plus the frontend build were run again from
 scratch: `dotnet build POS.sln -c Release` (0 warnings, 0 errors), `POS.UnitTests`

@@ -18,6 +18,12 @@ architecture, and 136 integration tests passing, plus a React back-office fronte
 covers every module. Nothing here is aspirational text; run the commands below yourself.
 Re-verified from scratch 2026-08-23 (all four suites plus `npm run build`, no code
 changes since the 2026-08-05 state HANDOVER.md describes) — same numbers, still clean.
+Independently re-verified again 2026-08-27 in a separate review session (build, all
+three .NET suites, frontend build, and `npm audit`) — still 336/15/136 and 0
+vulnerabilities. Three cosmetic-only commits landed in between (2026-08-24/26): the
+"Mecodex" brand kit is now wired in as the app's favicon and login/sidebar mark; no
+API, schema, or test surface changed. See HANDOVER.md §9 and PROJECT_STATUS.md for
+details.
 
 ## Getting started
 
