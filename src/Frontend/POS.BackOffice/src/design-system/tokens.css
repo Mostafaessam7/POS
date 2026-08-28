@@ -1,0 +1,137 @@
+/* ============================================================================
+ * Mecodex Design Tokens — theme-independent layer
+ *
+ * WHAT LIVES HERE
+ * Everything that does NOT change between products: the type scale, spacing,
+ * radius, elevation, motion, and the baseline rules every app would otherwise
+ * copy-paste.
+ *
+ * WHAT DOES NOT LIVE HERE
+ * Colour. Each product picks one file from themes/ — see themes/README or the
+ * table below. This file used to carry a palette too; that was split out when
+ * the products moved to per-product identities, because a palette in both places
+ * is a guaranteed source of drift.
+ *
+ * USAGE — always both, in this order:
+ *
+ *   @import "design-system/tokens.css";
+ *   @import "design-system/themes/navy-corporate.css";
+ *
+ * CURRENT ASSIGNMENTS
+ *   navy-corporate    RealEstateCRM
+ *   enterprise-blue   PosFlow
+ *   amber-commerce    POS, E-Commerce
+ *   slate-pro         Gym Manager
+ *   modern-teal       Subscription Tracker, MeCodex
+ *
+ * Switching a product's identity is a one-line import change. Every theme file
+ * exposes an identical set of 27 token names, which is what makes that true.
+ * ========================================================================== */
+
+:root {
+  /* ---- Typography -------------------------------------------------------
+     The mono display face is the Mecodex signature — losing it loses the brand,
+     regardless of which colour theme a product uses. */
+  --mx-font-heading: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --mx-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mx-font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --mx-text-display: clamp(2.75rem, 1.6rem + 3.6vw, 5rem);
+  --mx-text-h1: clamp(2.25rem, 1.6rem + 2.2vw, 3.25rem);
+  --mx-text-h2: clamp(1.7rem, 1.35rem + 1.3vw, 2.5rem);
+  --mx-text-h3: clamp(1.1rem, 1.02rem + 0.3vw, 1.3rem);
+  --mx-text-body-lg: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
+  --mx-text-body: 1rem;
+  --mx-text-caption: 0.85rem;
+  --mx-text-label: 0.76rem;
+  --mx-text-button: 0.88rem;
+
+  --mx-leading-tight: 1.12;
+  --mx-leading-body: 1.6;
+  --mx-tracking-label: 0.09em;
+
+  /* ---- Spacing, radius, layout ------------------------------------------ */
+  --mx-space-3xs: 0.25rem;
+  --mx-space-2xs: 0.5rem;
+  --mx-space-xs: 0.75rem;
+  --mx-space-sm: 1rem;
+  --mx-space-md: 1.5rem;
+  --mx-space-lg: 2.5rem;
+  --mx-space-xl: 4rem;
+  --mx-space-2xl: 6rem;
+  --mx-space-3xl: 8.5rem;
+
+  --mx-radius-sm: 8px;
+  --mx-radius-md: 14px;
+  --mx-radius-lg: 20px;
+  --mx-radius-pill: 999px;
+
+  --mx-container: 1240px;
+  --mx-header-height: 64px;
+
+  /* ---- Elevation ---------------------------------------------------------
+     Deliberately restrained: nothing carries a resting glow. Shadows here
+     communicate interaction, not decoration. Neutral rgba rather than a themed
+     colour, so one definition works under every palette. */
+  --mx-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --mx-shadow-md: 0 8px 20px -8px rgba(16, 24, 40, 0.18);
+  --mx-shadow-lg: 0 24px 48px -24px rgba(16, 24, 40, 0.28);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --mx-ease: cubic-bezier(0.16, 0.8, 0.32, 1);
+  --mx-transition: 220ms var(--mx-ease);
+  --mx-transition-slow: 480ms var(--mx-ease);
+}
+
+/* On a dark ground a light shadow reads as haze rather than depth, so only the
+   elevation values change. Colour comes from the theme file. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --mx-shadow-md: 0 10px 24px -12px rgba(0, 0, 0, 0.5);
+    --mx-shadow-lg: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  }
+}
+
+:root[data-theme="dark"] {
+  --mx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --mx-shadow-md: 0 10px 24px -12px rgba(0, 0, 0, 0.5);
+  --mx-shadow-lg: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Baseline ----------------------------------------------------------
+   Only what every product needs identically. Component styling belongs in the
+   products; this is the handful of global rules that would otherwise be
+   copy-pasted into six codebases. */
+
+body {
+  background: var(--mx-surface-base);
+  color: var(--mx-text);
+  font-family: var(--mx-font-body);
+  font-size: var(--mx-text-body);
+  line-height: var(--mx-leading-body);
+}
+
+/* Numerals in tables and metrics have to line up in columns. */
+.mx-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* One focus style everywhere. :focus-visible, not :focus, so a mouse click does
+   not leave a ring behind while keyboard focus still shows one. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--mx-focus-ring);
+  border-radius: var(--mx-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

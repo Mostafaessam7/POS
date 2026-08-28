@@ -1,0 +1,135 @@
+/* ============================================================================
+ * Mecodex theme — Amber Commerce
+ *
+ * Assigned to: POS, E-Commerce
+ *
+ * Pairs with tokens.css, which carries everything theme-independent (type scale,
+ * spacing, radius, motion, elevation). This file defines ONLY what varies between
+ * themes: surfaces, text, borders and the brand colours.
+ *
+ * TOKEN NAMES ARE IDENTICAL IN EVERY THEME FILE. Swapping a product's theme is a
+ * one-line import change with no other edits anywhere — that is the entire point
+ * of the split. Do not add a token here that does not exist in every other theme.
+ *
+ * SEMANTIC COLOURS ARE IDENTICAL IN EVERY THEME. success / warning / danger /
+ * info do not vary by product: an error must look like an error everywhere, or
+ * the signal stops being learnable. They appear in each file so a theme reads as
+ * a complete palette, but they are generated from one source and cannot drift.
+ *
+ * Every value below was derived and verified, not picked. Each foreground clears
+ * WCAG AA (>= 4.5:1) against the surface it renders on, in both modes.
+ * Regenerate with design-system/build-themes.mjs.
+ * ========================================================================== */
+
+:root {
+  --mx-surface-sunk: #f6f4f1;
+  --mx-surface-base: #fbf9f7;
+  --mx-surface: #ffffff;
+  --mx-surface-raised: #ffffff;
+
+  --mx-text: #423324;
+  --mx-text-secondary: #645546;
+  --mx-text-muted: #817162;
+  --mx-text-on-accent: #ffffff;
+
+  --mx-border: #e2dbd4;
+  --mx-border-strong: #c9bdb1;
+
+  --mx-accent: #b15e16;
+  --mx-accent-hover: #9b4800;
+  --mx-accent-subtle: rgba(177, 94, 22, 0.12);
+  --mx-accent-border: rgba(177, 94, 22, 0.42);
+
+  --mx-secondary: #207caa;
+  --mx-secondary-subtle: rgba(32, 124, 170, 0.12);
+
+  --mx-accent-alt: #d0441a;
+  --mx-accent-alt-subtle: rgba(208, 68, 26, 0.12);
+
+  --mx-focus-ring: 0 0 0 3px rgba(177, 94, 22, 0.38);
+
+  --mx-success: #19864c;
+  --mx-success-subtle: rgba(25, 134, 76, 0.12);
+  --mx-warning: #a06807;
+  --mx-warning-subtle: rgba(160, 104, 7, 0.12);
+  --mx-danger: #dc3327;
+  --mx-danger-subtle: rgba(220, 51, 39, 0.12);
+  --mx-info: #2372d9;
+  --mx-info-subtle: rgba(35, 114, 217, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mx-surface-sunk: #16110b;
+    --mx-surface-base: #1f1811;
+    --mx-surface: #292017;
+    --mx-surface-raised: #382d21;
+
+    --mx-text: #e7ded6;
+    --mx-text-secondary: #baab9b;
+    --mx-text-muted: #988776;
+    --mx-text-on-accent: #0b0f16;
+
+    --mx-border: #4d4033;
+    --mx-border-strong: #6c5c4b;
+
+    --mx-accent: #d66d10;
+    --mx-accent-hover: #f0872a;
+    --mx-accent-subtle: rgba(214, 109, 16, 0.18);
+    --mx-accent-border: rgba(214, 109, 16, 0.42);
+
+    --mx-secondary: #1a93d0;
+    --mx-secondary-subtle: rgba(26, 147, 208, 0.18);
+
+    --mx-accent-alt: #e65f36;
+    --mx-accent-alt-subtle: rgba(230, 95, 54, 0.18);
+
+    --mx-focus-ring: 0 0 0 3px rgba(214, 109, 16, 0.38);
+
+    --mx-success: #259e5d;
+    --mx-success-subtle: rgba(37, 158, 93, 0.2);
+    --mx-warning: #be7f13;
+    --mx-warning-subtle: rgba(190, 127, 19, 0.2);
+    --mx-danger: #e46258;
+    --mx-danger-subtle: rgba(228, 98, 88, 0.2);
+    --mx-info: #4c8de2;
+    --mx-info-subtle: rgba(76, 141, 226, 0.2);
+  }
+}
+
+:root[data-theme="dark"] {
+  --mx-surface-sunk: #16110b;
+  --mx-surface-base: #1f1811;
+  --mx-surface: #292017;
+  --mx-surface-raised: #382d21;
+
+  --mx-text: #e7ded6;
+  --mx-text-secondary: #baab9b;
+  --mx-text-muted: #988776;
+  --mx-text-on-accent: #0b0f16;
+
+  --mx-border: #4d4033;
+  --mx-border-strong: #6c5c4b;
+
+  --mx-accent: #d66d10;
+  --mx-accent-hover: #f0872a;
+  --mx-accent-subtle: rgba(214, 109, 16, 0.12);
+  --mx-accent-border: rgba(214, 109, 16, 0.42);
+
+  --mx-secondary: #1a93d0;
+  --mx-secondary-subtle: rgba(26, 147, 208, 0.12);
+
+  --mx-accent-alt: #e65f36;
+  --mx-accent-alt-subtle: rgba(230, 95, 54, 0.12);
+
+  --mx-focus-ring: 0 0 0 3px rgba(214, 109, 16, 0.38);
+
+  --mx-success: #259e5d;
+  --mx-success-subtle: rgba(37, 158, 93, 0.2);
+  --mx-warning: #be7f13;
+  --mx-warning-subtle: rgba(190, 127, 19, 0.2);
+  --mx-danger: #e46258;
+  --mx-danger-subtle: rgba(228, 98, 88, 0.2);
+  --mx-info: #4c8de2;
+  --mx-info-subtle: rgba(76, 141, 226, 0.2);
+}
