@@ -51,10 +51,22 @@ jobs:
           dotnet tool install --global nuget-license
           nuget-license -i POS.sln -t --allowed-license-types licenses.json
 
+      # Detects the *presence* of a finding rather than the absence of a
+      # reassuring string. The earlier `grep -q "no vulnerable packages" || exit 1`
+      # looked stricter than it was: across a multi-project solution the output
+      # carries one line per project, so a single clean project ("...has no
+      # vulnerable packages") satisfied the grep and passed the build even when
+      # another project reported "has the following vulnerable packages" right
+      # below it. Note `dotnet list package --vulnerable` exits 0 either way, so
+      # inspecting the output is the only option here.
       - name: Vulnerability scan
         run: |
           dotnet list package --vulnerable --include-transitive 2>&1 | tee vuln.log
-          grep -q "no vulnerable packages" vuln.log || (echo "Vulnerable packages found" && exit 1)
+          if grep -q "has the following vulnerable packages" vuln.log; then
+            echo "::error::Vulnerable NuGet packages found (see the table above)."
+            exit 1
+          fi
+          echo "No vulnerable packages found."
 
       - name: Publish test results
         if: always()
