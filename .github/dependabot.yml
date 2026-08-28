@@ -1,0 +1,48 @@
+version: 2
+
+# Weekly dependency updates. Grouped deliberately: the Microsoft/EF/ASP.NET packages
+# move together with the .NET release train and are not meaningful to review one at a
+# time, so they arrive as a single PR rather than a dozen. Security updates are not
+# subject to the open-PR limit -- Dependabot always raises those.
+updates:
+  - package-ecosystem: nuget
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      microsoft:
+        patterns:
+          - "Microsoft.*"
+          - "System.*"
+      test-tooling:
+        patterns:
+          - "xunit*"
+          - "coverlet.*"
+          - "FluentAssertions"
+
+  - package-ecosystem: npm
+    directory: "/src/Frontend/POS.BackOffice"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+      build-tooling:
+        patterns:
+          - "vite"
+          - "vitest"
+          - "typescript"
+          - "@playwright/test"
+
+  # Keeps the pinned action versions in .github/workflows current -- the NuGet/npm
+  # scanning in CI does not cover the actions the workflow itself runs.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
