@@ -217,6 +217,30 @@ app.UseSerilogRequestLogging();
 if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
+// Baseline response headers. Placed before HTTPS redirection so they are present on the redirect
+// response too, and before the auth middleware so a 401 carries them as well — an error response
+// is exactly the kind of thing that gets framed or sniffed.
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+
+    headers["X-Content-Type-Options"] = "nosniff";
+    headers["X-Frame-Options"] = "DENY";
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=()";
+
+    // This host serves JSON only; the one HTML surface is the OpenAPI UI, which is gated below on
+    // Development or an explicit opt-in flag. So outside Development a policy that forbids
+    // everything costs nothing and stops the response ever being executed as active content if it
+    // were somehow rendered somewhere.
+    if (!app.Environment.IsDevelopment())
+    {
+        headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'";
+    }
+
+    await next();
+});
+
 app.UseHttpsRedirection();
 
 app.UseRateLimiter();
