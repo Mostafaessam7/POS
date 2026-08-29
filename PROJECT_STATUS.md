@@ -133,9 +133,51 @@ advisory, still not applicable to this SPA).
 - **Auth**: HttpOnly refresh-token cookie, real server-side logout, access token never
   touches `localStorage`.
 
+## 4. Decisions adopted (workspace-level, affecting this project)
+
+| Decision | What it means here |
+|---|---|
+| **POS and PosFlow are separate products — do not merge** | PosFlow is the mature POS product; this one stays independent with its own roadmap. Neither should be refactored toward the other |
+| **Azure** is the primary deployment target | Not wired here yet |
+| **Azure Key Vault** for production secrets | Not wired here yet |
+| **No Redis here** | Redis was scoped to PosFlow / Gym Manager / RealEstateCRM only. This project does not carry the load that justifies it |
+| **App Insights (backend) + Sentry (frontend)** | Not installed here yet. Current observability is Seq (logs) + Jaeger (traces) via OpenTelemetry |
+| **Amber Commerce theme** | This product's identity on the shared `MeCodex/design-system` token architecture |
+
+## 5. Recent work not covered above (2026-08-29)
+
+These landed after the sections above were last revised, and were undocumented until this pass:
+
+- **Shared design system, Amber Commerce theme** — colour now comes from
+  `MeCodex/design-system`. Token *names* are identical across every product theme, so components
+  stay portable. The existing light/dark toggle and its system-preference behaviour are unchanged.
+- **Baseline security response headers** added.
+- **Vulnerability scan actually gates now.** It previously could pass with vulnerabilities present:
+  `dotnet list package --vulnerable` exits 0 even when it finds something, so a step that only
+  checked the exit code reported problems and went green. It now inspects the output.
+- **Dependabot** configured.
+- **BackOffice documented** — see the commit for detail.
+
+## 6. Deliberately deferred (and why)
+
+| Item | Why |
+|---|---|
+| **Offline-first hardware till** | The single biggest gap, and known — see §1. A browser register exists and works against a real API; an offline, hardware-integrated till is a different product surface, not an increment |
+| **Merging with PosFlow** | Explicit decision: two separate products |
+| **Redis** | Scoped to the three products that need it. Adding it here would be complexity without a load problem to solve |
+| **`scaffold.sh` / `generate-projects.py` kept, not deleted** | One-time bootstrap scripts whose output (`POS.sln` + 32 `.csproj`) is committed. Checked before deciding: only the initial commit ever touched those files, so re-running is not destructive, and the scripts document how the project structure was generated. The README already states they are not part of the build loop |
+
 ---
 
-*Re-verified 2026-08-27, independently, in a fresh review session (no HANDOVER.md/
+*Re-verified 2026-08-29, during the workspace-wide cleanup pass. `dotnet build POS.sln -c Release`
+(**0 warnings**, 0 errors), `POS.UnitTests` (**336/336**), `POS.ArchitectureTests` (**15/15**),
+`POS.IntegrationTests` against a real SQL Server (**136/136**), and `npm run build` in
+`src/Frontend/POS.BackOffice` (clean; the same pre-existing "chunk larger than 500 kB" advisory,
+which is a warning not an error). Every number in this file still holds. Added sections 4-6 above:
+the last four commits — the shared design system, security headers, Dependabot, and the
+vulnerability-scan gate fix — were documented in neither this file nor HANDOVER.md until now.*
+
+*Previously re-verified 2026-08-27, independently, in a fresh review session (no HANDOVER.md/
 PROJECT_STATUS.md claim was taken on faith — each was checked against the actual
 repository). `dotnet build POS.sln -c Release` (0 warnings, 0 errors), `POS.UnitTests`
 (336/336), `POS.ArchitectureTests` (15/15), `POS.IntegrationTests` against a real local
