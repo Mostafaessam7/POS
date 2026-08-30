@@ -86,4 +86,18 @@
          (community fork, Apache 2.0). See docs/adr/010-assertion-library.md -->
     <PackageVersion Include="Shouldly" Version="4.2.1" />
   </ItemGroup>
+
+  <!-- Transitive pins closing High-severity advisories that CI flags. Both arrive through other
+       packages, so neither can be fixed by bumping a direct reference; central transitive pinning
+       is enabled above, which is what makes these effective. -->
+  <ItemGroup>
+    <!-- GHSA-2m69-gcr7-jv3q. Pulled in by Microsoft.EntityFrameworkCore.Sqlite in
+         POS.TerminalAgent, which resolved 2.1.10. 2.1.13 is the patched release on the same
+         line - 3.x is a major jump with no advisory reason to take it here. -->
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.13" />
+
+    <!-- GHSA-q939-rpr3-3284. Pulled in by Testcontainers.MsSql in POS.IntegrationTests, which
+         resolved 2023.0.0. -->
+    <PackageVersion Include="SSH.NET" Version="2026.0.0" />
+  </ItemGroup>
 </Project>
