@@ -46,10 +46,36 @@ jobs:
       # 6. Licence audit. Given MediatR, AutoMapper, MassTransit and
       #    FluentAssertions all changed terms within eighteen months, an
       #    automated check is table stakes rather than paranoia.
+      #    license-url-mappings.json exists because some packages declare their licence as a bare
+      #    URL rather than an SPDX expression, and the tool cannot resolve those on its own — it
+      #    reports "Cannot determine License type for url ..." and fails. That is the gate working:
+      #    an unreadable licence is not an approved one. Each entry records what the URL actually
+      #    points at (xUnit is Apache-2.0, SSH.NET is MIT, the aspnet/2.0.0 file is Apache-2.0)
+      #    rather than widening licenses.json, so a genuinely unknown licence still fails.
+      #
+      #    ⚠️ THIS STEP IS CURRENTLY RED, AND WAS BEFORE THESE MAPPINGS EXISTED. 49 transitive
+      #    packages — the .NET Core 1.x-era System.* set (System.Collections, System.IO,
+      #    Microsoft.NETCore.Platforms, ...) plus Microsoft.Data.SqlClient.SNI.runtime — carry the
+      #    legacy Microsoft licence at http://go.microsoft.com/fwlink/?LinkId=329770.
+      #
+      #    licenses.json already lists "Microsoft Software License", but nuget-license does not
+      #    match that string: mapping the same URL to "MIT" instead drops the failure count from 49
+      #    to 1, which proves the allow-list works and this specific value is what it rejects.
+      #
+      #    Mapping it to MIT anyway would be a false licensing claim — fwlink 329770 is the
+      #    Microsoft .NET Library EULA, not MIT — so it is deliberately left failing. Deciding
+      #    whether that licence is acceptable, and in what form to record it, is a licensing call
+      #    for the repository owner, not something to paper over in CI config.
+      #
+      #    Verified this is not caused by Application Insights: removing that package entirely
+      #    leaves the count at exactly 49.
       - name: Licence audit
         run: |
           dotnet tool install --global nuget-license
-          nuget-license -i POS.sln -t --allowed-license-types licenses.json
+          nuget-license -i POS.sln -t \
+            --allowed-license-types licenses.json \
+            --licenseurl-to-license-mappings license-url-mappings.json \
+            --override-package-information license-overrides.json
 
       # Detects the *presence* of a finding rather than the absence of a
       # reassuring string. The earlier `grep -q "no vulnerable packages" || exit 1`

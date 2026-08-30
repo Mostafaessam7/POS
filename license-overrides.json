@@ -1,0 +1,7 @@
+[
+  {
+    "Id": "Microsoft.Data.SqlClient.SNI.runtime",
+    "Version": "5.1.1",
+    "License": "Microsoft Software License"
+  }
+]
