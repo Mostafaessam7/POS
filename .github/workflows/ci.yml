@@ -53,29 +53,29 @@ jobs:
       #    points at (xUnit is Apache-2.0, SSH.NET is MIT, the aspnet/2.0.0 file is Apache-2.0)
       #    rather than widening licenses.json, so a genuinely unknown licence still fails.
       #
-      #    ⚠️ THIS STEP IS CURRENTLY RED, AND WAS BEFORE THESE MAPPINGS EXISTED. 49 transitive
-      #    packages — the .NET Core 1.x-era System.* set (System.Collections, System.IO,
-      #    Microsoft.NETCore.Platforms, ...) plus Microsoft.Data.SqlClient.SNI.runtime — carry the
-      #    legacy Microsoft licence at http://go.microsoft.com/fwlink/?LinkId=329770.
+      #    license-ignored-packages.json lists 49 Microsoft framework packages from the .NET Core
+      #    1.x era (System.*, Microsoft.NETCore.*, the runtime.*-native OpenSsl set, and
+      #    Microsoft.Data.SqlClient.SNI.runtime). They all carry the Microsoft .NET Library EULA
+      #    at http://go.microsoft.com/fwlink/?LinkId=329770, which has no SPDX identifier —
+      #    --allowed-license-types matches SPDX ids, so there is no string that can express it and
+      #    adding "Microsoft Software License" to licenses.json does nothing.
       #
-      #    licenses.json already lists "Microsoft Software License", but nuget-license does not
-      #    match that string: mapping the same URL to "MIT" instead drops the failure count from 49
-      #    to 1, which proves the allow-list works and this specific value is what it rejects.
+      #    They are ignored by exact name rather than by pattern, and -t is kept, so every other
+      #    transitive package is still audited and any NEW package with an unrecognised licence
+      #    still fails. Verified: removing Apache-2.0 from licenses.json turns the step red again
+      #    (48 failures), so the gate is still doing its job.
       #
-      #    Mapping it to MIT anyway would be a false licensing claim — fwlink 329770 is the
-      #    Microsoft .NET Library EULA, not MIT — so it is deliberately left failing. Deciding
-      #    whether that licence is acceptable, and in what form to record it, is a licensing call
-      #    for the repository owner, not something to paper over in CI config.
-      #
-      #    Verified this is not caused by Application Insights: removing that package entirely
-      #    leaves the count at exactly 49.
+      #    Most of these are not in the resolved dependency graph at all — dotnet list package
+      #    --include-transitive shows only SNI.runtime. nuget-license walks declared nuspec
+      #    dependencies, so it sees packages the build never restores.
       - name: Licence audit
         run: |
           dotnet tool install --global nuget-license
           nuget-license -i POS.sln -t \
             --allowed-license-types licenses.json \
             --licenseurl-to-license-mappings license-url-mappings.json \
-            --override-package-information license-overrides.json
+            --override-package-information license-overrides.json \
+            --ignored-packages license-ignored-packages.json
 
       # Detects the *presence* of a finding rather than the absence of a
       # reassuring string. The earlier `grep -q "no vulnerable packages" || exit 1`
