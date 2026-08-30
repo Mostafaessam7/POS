@@ -229,3 +229,28 @@ API). Also fixed a matching persistence bug in `Sale.Open()`
 and an EF Core cascade-tracking bug where a newly-added `Tender` on an
 already-tracked `Sale` (the resume/complete-held path) was misclassified as `Modified`
 instead of `Added` — see the remarks in `Sale.cs` and `SalesEndpoints.cs`.*
+
+## 7. Key Vault, App Insights and Sentry (2026-08-30)
+
+All three are wired and **inert until configured** — each registers only when its value is present,
+so nothing changes for a deployment that supplies none of them.
+
+| Feature | Enabled by |
+|---|---|
+| Azure Key Vault | `KeyVault__Uri` |
+| Application Insights | `APPLICATIONINSIGHTS_CONNECTION_STRING` |
+| Sentry (back-office) | `VITE_SENTRY_DSN` (see `.env.example`; the local `.env` is gitignored) |
+
+Application Insights sits **alongside** the existing OpenTelemetry export to Jaeger rather than
+replacing it. The two answer different questions and nothing about the existing traces changed, so
+a deployment can use either or both.
+
+Sentry is imported dynamically so it lands in its own chunk. That matters here because this build
+already carries a "chunk larger than 500 kB" advisory, and an always-present dependency for a
+feature that may never be switched on would make it worse for no benefit.
+
+Redis remains deliberately out of scope for this product — it was agreed for PosFlow, Gym Manager
+and RealEstateCRM only.
+
+**Branch protection is not available on this repo:** it is private, and GitHub requires Pro for
+protection on private repositories.
