@@ -58,6 +58,26 @@ if (!string.IsNullOrWhiteSpace(keyVaultUri))
         new Azure.Identity.DefaultAzureCredential());
 }
 
+// Application Insights, registered only when a connection string is present. Set
+// APPLICATIONINSIGHTS_CONNECTION_STRING (or ApplicationInsights:ConnectionString) to enable it.
+//
+// Gated rather than called unconditionally: AddApplicationInsightsTelemetry() with no connection
+// string still installs the whole telemetry pipeline - modules, processors, a background channel -
+// which then buffers and drops everything it collects. Pure overhead in every local run and every
+// test, for output nobody reads.
+//
+// This sits alongside the existing OpenTelemetry export to Jaeger rather than replacing it; the
+// two answer different questions and nothing here changes the traces already emitted.
+var appInsightsConnectionString =
+    builder.Configuration["ApplicationInsights:ConnectionString"]
+    ?? builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+
+if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+{
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+        options.ConnectionString = appInsightsConnectionString);
+}
+
 // Serilog replaces the default logger before anything else so that a failure during
 // the rest of startup is still recorded in the same format as everything else.
 builder.Host.UseSerilog((context, services, configuration) => configuration
