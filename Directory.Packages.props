@@ -58,7 +58,7 @@
 
          Every version in this file was chosen without a package feed and is unverified
          until restore succeeds (ADR 056). -->
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
     <!-- Instrumentation.Http and Instrumentation.EntityFrameworkCore were declared here
