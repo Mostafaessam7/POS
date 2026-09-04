@@ -35,7 +35,7 @@
   </ItemGroup>
   <ItemGroup Label="Validation">
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
-    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
   <ItemGroup Label="Caching">
     <PackageVersion Include="StackExchange.Redis" Version="2.8.16" />
