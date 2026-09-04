@@ -271,3 +271,26 @@ ignore; one that goes green without auditing anything is worse.
 
 Verified against a stubbed npm across four cases: clean run, real High advisory, 503 on every
 attempt, and a 503 that recovers on the second attempt.
+
+---
+
+## Update 2026-09-04 — one branch, protected; routine dependency PRs off
+
+**This repo keeps a single branch: `main`.** Any leftover Dependabot branches were deleted and no
+long-lived branches are kept.
+
+**`main` is protected**, and the protection is deliberately the kind that fits a one-branch
+workflow:
+
+| Setting | Value | Why |
+|---|---|---|
+| Force pushes | **blocked** | History cannot be rewritten or silently rolled back. Verified by attempting one and having it rejected |
+| Branch deletion | **blocked** | `main` cannot be removed |
+| Applies to admins | **yes** | The owner is not exempt; that exemption was the hole fixed on E-Commerce earlier |
+| Required status checks | **none** | Deliberate trade-off. Required checks make direct pushes to `main` impossible and force every change through a branch and PR, which is exactly what the one-branch decision rules out. CI still runs on every push — it reports rather than gates |
+
+**Routine dependency PRs are off.** Every `open-pull-requests-limit` in `.github/dependabot.yml` is
+`0`, because weekly version bumps meant a continuous stream of branches to merge or close.
+**Security updates are unaffected** — Dependabot ignores that limit for security advisories, so a
+dependency with a known vulnerability still opens a PR. Set the limits back to a non-zero number to
+bring routine updates back.
