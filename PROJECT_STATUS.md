@@ -254,3 +254,20 @@ and RealEstateCRM only.
 
 **Branch protection is not available on this repo:** it is private, and GitHub requires Pro for
 protection on private repositories.
+
+---
+
+## Update 2026-09-04 — CI no longer reads an npm outage as a security finding
+
+`npm audit` exits non-zero for two unrelated reasons: it found an advisory, or it could not reach
+the registry at all. The frontend `Audit` step treated those identically. On 2026-09-04 a burst of
+503s from npm's audit endpoint failed five unrelated dependency PRs across this workspace,
+including this repo's — every one looked like a vulnerability and none was.
+
+The step now retries the transport up to three times, still fails hard on a genuine High/Critical
+finding, and if the registry stays unreachable says loudly that the audit did **not** run instead
+of reporting a clean pass. A check that goes red because npm was down is a check people learn to
+ignore; one that goes green without auditing anything is worse.
+
+Verified against a stubbed npm across four cases: clean run, real High advisory, 503 on every
+attempt, and a 503 that recovers on the second attempt.
