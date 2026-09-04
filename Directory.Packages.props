@@ -60,7 +60,7 @@
          until restore succeeds (ADR 056). -->
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.18.0" />
     <!-- Instrumentation.Http and Instrumentation.EntityFrameworkCore were declared here
          but referenced by no project, so their versions could never be validated by a
          restore. Removed rather than left as unverifiable guesses; add them back with a
