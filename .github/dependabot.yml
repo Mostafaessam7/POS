@@ -1,6 +1,19 @@
 version: 2
 
-# Weekly dependency updates. Grouped deliberately: the Microsoft/EF/ASP.NET packages
+# Routine version updates are OFF: every open-pull-requests-limit below is 0.
+#
+# These repos are kept at a single `main` branch with no long-lived branches, and a weekly
+# stream of version-bump PRs meant a steady stream of branches to merge or close. Setting the
+# limit to 0 is the documented way to stop that without deleting this file.
+#
+# Security updates are NOT affected. Dependabot ignores the open-PR limit for security
+# advisories, so a dependency with a known vulnerability still opens a PR. What stops is only
+# the "a newer version exists" churn.
+#
+# To bring routine updates back, set the limits to a non-zero number again. The grouping below
+# is kept for that reason.
+
+# Grouped deliberately: the Microsoft/EF/ASP.NET packages
 # move together with the .NET release train and are not meaningful to review one at a
 # time, so they arrive as a single PR rather than a dozen. Security updates are not
 # subject to the open-PR limit -- Dependabot always raises those.
@@ -9,7 +22,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     groups:
       microsoft:
         patterns:
@@ -25,7 +38,7 @@ updates:
     directory: "/src/Frontend/POS.BackOffice"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     groups:
       react:
         patterns:
@@ -45,4 +58,4 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 0
