@@ -126,4 +126,30 @@ jobs:
         run: npm run build
 
       - name: Audit
-        run: npm audit --audit-level=high
+        # npm audit exits non-zero for two unrelated reasons: it found an advisory, or it could
+        # not reach the registry at all. Treating those alike makes an npm outage look like a
+        # security finding -- on 2026-09-04 a burst of 503s from the audit endpoint failed five
+        # unrelated dependency PRs across these repos, and a red check that actually means "npm
+        # was down" is how a gate gets muted. So retry the transport, fail hard on a real
+        # finding, and if the registry stays unreachable say plainly that the audit did not run.
+        run: |
+          for attempt in 1 2 3; do
+            if out=$(npm audit --audit-level=high 2>&1); then
+              echo "$out"
+              echo "No High/Critical advisories."
+              exit 0
+            fi
+
+            if printf '%s' "$out" | grep -qiE 'audit endpoint returned an error|Service Unavailable|ENOTFOUND|ETIMEDOUT|EAI_AGAIN|ECONNRESET|socket hang up'; then
+              echo "Could not reach the npm registry (attempt $attempt of 3)."
+              sleep $((attempt * 15))
+              continue
+            fi
+
+            echo "$out"
+            echo "::error::npm audit found a High or Critical advisory."
+            exit 1
+          done
+
+          echo "$out"
+          echo "::warning::npm audit could not reach the npm registry after 3 attempts, so dependencies were NOT audited in this run. This is a transport failure, not a clean result."
